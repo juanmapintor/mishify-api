@@ -64,6 +64,22 @@ async function deleteSong(req, res) {
 
         if(!deletedSong) return res.status(404).send({message: 'La cancion que que solicitó no existe'});
 
+        //Reordenar
+        let songsToOrder = await Song.find(
+            {
+                number: { 
+                    $gt: deletedSong.number
+                },
+                album: deletedSong.album
+            }
+        ).exec();
+
+        if(songsToOrder.length > 0) {
+            for(let song of songsToOrder){
+                await Song.findByIdAndUpdate(song._id, {number: song.number - 1}).exec();
+            }
+        }
+
         return res.status(200).send({song: deletedSong});
 
     } catch(error) {
@@ -72,7 +88,9 @@ async function deleteSong(req, res) {
 
 }
 async function listSongs(req, res) {
-    let albumId = req.params.album;
+    let albumId = req.query.album;
+    let page = req.query.page ? +req.query.page : 1;
+    let itemsPerPage = req.query.items_per_page ? +req.query.items_per_page : 5;
 
     try {
         let songs = await Song
@@ -86,12 +104,21 @@ async function listSongs(req, res) {
                         model: 'Artist'
                     }
                 })
+            .paginate(page, itemsPerPage)
             .exec();
+
+        let total_items = await Song.countDocuments(albumId ? {album: albumId} : {}).exec();
 
         if(songs.length === 0) return res.status(200).send({message: 'No hay canciones para mostrar'});
 
-        return  res.status(200).send({songs});
+        return  res.status(200).send(
+            {
+                total_items: total_items,
+                items_per_page: itemsPerPage,
+                songs
+            });
     } catch(err) {
+        console.error(err);
         return res.status(500).send({message: 'Error al obtener las cancioens', error: err});
     }
 }
@@ -99,7 +126,7 @@ async function saveSong(req, res) {
     let song = new Song();
     let params = req.body;
 
-    song.number = params.number;
+    
     song.name = params.name;
     song.duration = params.duration;
     song.file = null;
@@ -109,11 +136,15 @@ async function saveSong(req, res) {
     try {
         if(!(await Album.findById(song.album))) return res.status(404).send({ message: 'El album asignado a la cancion no existe' });
 
+        let songOrder = await Song.countDocuments({album: song.album}).exec();
+
+        song.number = songOrder + 1;
+
         let newSong = await song.save();
 
         if(!newSong)  return res.status(404).send({ message: 'La cancion que que solicitó no se guardo' });
 
-        return res.status(404).send({song: newSong});
+        return res.status(200).send({song: newSong});
     } catch (error) {
         return res.status(500).send({ message: 'No se pudo guardar la cancion', error });
     }

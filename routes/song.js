@@ -10,7 +10,7 @@ const md_upload = multiparty({uploadDir: './uploads/songs'});
 const api = express.Router();
 
 api.post('/song', md_auth.ensureAuth, SongController.saveSong);
-api.get('/songs/:album?', md_auth.ensureAuth, SongController.listSongs);
+api.get('/songs', md_auth.ensureAuth, SongController.listSongs);
 api.get('/song/:id', md_auth.ensureAuth, SongController.getSong);
 api.put('/song/:id', md_auth.ensureAuth, SongController.updateSong);
 api.delete('/song/:id', md_auth.ensureAuth, SongController.deleteSong);

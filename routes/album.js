@@ -10,7 +10,7 @@ const md_upload = multiparty({ uploadDir: './uploads/albums' });
 const api = express.Router();
 
 api.post('/album', md_auth.ensureAuth, AlbumController.saveAlbum);
-api.get('/albums/:artist?', md_auth.ensureAuth, AlbumController.listAlbums);
+api.get('/albums', md_auth.ensureAuth, AlbumController.listAlbums);
 api.get('/album/:id', md_auth.ensureAuth, AlbumController.getAlbum);
 api.put('/album/:id', md_auth.ensureAuth, AlbumController.updateAlbum);
 api.delete('/album/:id', md_auth.ensureAuth, AlbumController.deleteAlbum);
