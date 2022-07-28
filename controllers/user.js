@@ -7,14 +7,6 @@ const jwt = require('../services/jwt');
 const fs = require('fs');
 const path = require('path');
 
-function pruebas(req, res) {
-    res.status(200).send(
-        {
-            message: 'Prueba de accion de controlador de usuarios'
-        }
-    );
-}
-
 function saveUser(req, res){
     let user = new User();
     let params = req.body;
