@@ -192,7 +192,6 @@ function getImageFile(req, res) {
 }
 
 module.exports = {
-    pruebas,
     saveUser,
     loginUser,
     updateUser,
