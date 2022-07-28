@@ -4,7 +4,7 @@ const app = require('./app');
 const port = process.env.PORT || 3977;
 
 
-mongoose.connect('mongodb://localhost:27017/curso-mean2', (err, res) => {
+mongoose.connect('mongodb+srv://admin:admin@cluster0.tffpl.mongodb.net/curso-mean2?retryWrites=true&w=majority', (err, res) => {
    if (err) {
        console.error(err);
    } else {

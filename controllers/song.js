@@ -158,7 +158,7 @@ async function uploadSongFile(req, res){
 
     if(req.files){
         let file_path = req.files.file.path;
-        let file_split = file_path.split('\/');
+        let file_split = file_path.split('\\');
         file_name = file_split[2];
 
 
@@ -174,7 +174,7 @@ async function uploadSongFile(req, res){
                 return res.status(500).send({ message: 'No se pudo guardar la cancion', error });
             }
         } else {
-            return res.status(200).send({message: 'Extension del archivo no valida'});
+            return res.status(200).send({message: 'Extension del archivo no validaasdfasdf'});
         }
     } else {
         return res.status(200).send({message: 'No has subido ningun archivo'});
