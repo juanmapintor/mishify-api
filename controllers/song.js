@@ -158,7 +158,7 @@ async function uploadSongFile(req, res){
 
     if(req.files){
         let file_path = req.files.file.path;
-        let file_split = file_path.split('\\');
+        let file_split = file_path.split('\/');
         file_name = file_split[2];
 
 
