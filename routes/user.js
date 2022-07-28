@@ -8,6 +8,8 @@ const md_upload = multiparty({uploadDir: './uploads/users'});
 
 const api = express.Router();
 
+
+
 api.post('/register', UserController.saveUser);
 api.post('/login', UserController.loginUser);
 api.put('/update-user/:id', md_auth.ensureAuth,UserController.updateUser);
